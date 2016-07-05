@@ -1,8 +1,3 @@
 # Settings 
 
 GEOBLACKLIGHT_URL: 'https://pulmap-dev.princeton.edu'
-
-# Squash Settings
-SQUASH_API_HOST: 'http://squash-host.example.com'
-SQUASH_API_KEY: 'squash-api-key'
-SQUASH_DISABLE: <%= (Rails.env.development? || Rails.env.test?) %>

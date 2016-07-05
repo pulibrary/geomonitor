@@ -13,6 +13,8 @@ gem 'pg'
 
 gem 'sqlite3'
 
+gem 'mysql2'
+
 gem 'net-ping'
 
 # Pagination gems
@@ -55,6 +57,11 @@ end
 group :development do
   gem 'bullet', '~> 4.14.0'
   gem 'byebug'
+  gem 'capistrano-rails'
+  gem 'capistrano-bundler'
+  gem 'capistrano-passenger'
+  gem 'capistrano-rails-console'
+  gem 'capistrano', '3.4.0'
 end
 
 group :development, :test do
@@ -70,20 +77,9 @@ group :test do
   gem 'rake'
 end
 
-group :deployment do
-  gem 'capistrano', '~> 3.4.0'
-  gem 'capistrano-bundler'
-  gem 'capistrano-rails'
-  gem 'lyberteam-capistrano-devel', '3.1.0'
-end
-
 gem 'rails_config'
-gem 'squash_ruby', require: 'squash/ruby'
-gem 'squash_rails', require: 'squash/rails'
-
-gem 'newrelic_rpm'
-
 gem 'pg_csv'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
