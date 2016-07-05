@@ -32,11 +32,12 @@
         Status.run_check(layer)
       end
     end
-    desc 'Check Stanfords active layers'
-    task :check_stanford => :environment do
-      institution = Institution.find_by name: "Stanford"
-      stanford_hosts = Host.where(institution_id: institution.id)
-      layers = Layer.where(host_id: stanford_hosts, active: true)
+
+    desc 'Check institution active layers'
+    task :check_inst, [:institution]  => :environment do |t, args|
+      institution = Institution.find_by name: args[:institution]
+      hosts = Host.where(institution_id: institution.id)
+      layers = Layer.where(host_id: hosts, active: true)
       layers.shuffle.each do |layer|
         Status.run_check(layer)
       end
