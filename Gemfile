@@ -11,6 +11,8 @@ gem 'faraday'
 
 gem 'pg'
 
+gem 'sqlite3'
+
 gem 'net-ping'
 
 # Pagination gems
