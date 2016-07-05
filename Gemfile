@@ -52,6 +52,7 @@ end
 
 group :development do
   gem 'bullet', '~> 4.14.0'
+  gem 'byebug'
 end
 
 group :development, :test do

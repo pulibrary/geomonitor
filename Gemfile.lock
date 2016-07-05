@@ -50,6 +50,7 @@ GEM
     bundler-audit (0.3.1)
       bundler (~> 1.2)
       thor (~> 0.18)
+    byebug (9.0.5)
     capistrano (3.4.0)
       i18n
       rake (>= 10.0.0)
@@ -265,6 +266,7 @@ DEPENDENCIES
   autoprefixer-rails
   bootstrap-sass (~> 3.3.4.1)
   bullet (~> 4.14.0)
+  byebug
   capistrano (~> 3.4.0)
   capistrano-bundler
   capistrano-rails
@@ -300,4 +302,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   1.10.6
+   1.12.5
