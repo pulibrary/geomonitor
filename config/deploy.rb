@@ -1,59 +1,53 @@
-# config valid only for Capistrano 3.1
+# config valid only for current version of Capistrano
 lock '3.4.0'
 
 set :application, 'geomonitor'
-set :repo_url, 'https://github.com/geoblacklight/geomonitor.git'
+set :repo_url, 'https://github.com/pulibrary/geomonitor.git'
+set :branch, 'master'
 
 # Default branch is :master
-ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
-ask :user, proc { `whoami`.chomp }.call
-set :home_directory, "/opt/app/#{fetch(:user)}"
+set :branch, ENV['BRANCH'] || 'master'
 
-set :deploy_to, "#{fetch(:home_directory)}/#{fetch(:application)}"
-
-set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+# Default deploy_to directory is /var/www/my_app_name
+set :deploy_to, '/opt/geomonitor'
 
 # Default value for :scm is :git
-# set :scm, :git
+set :scm, :git
 
 # Default value for :format is :pretty
 # set :format, :pretty
 
 # Default value for :log_level is :debug
-set :log_level, :info
+set :log_level, :debug
 
-# Default value for :pty is false
-# set :pty, true
+# need tty for sudo
+set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/solr.yml}
+set :linked_files, fetch(:linked_files, []).push('config/solr.yml',
+                                                 'config/database.yml',
+                                                 'config/initializers/secret_token.rb')
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{data config/settings log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, fetch(:linked_dirs, []).push('log',
+                                               'tmp/pids',
+                                               'tmp/cache/downloads',
+                                               'tmp/sockets')
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
-task :prepare_bundle_config do
-  'bundle config build.pg --with-pg-config=/usr/pgsql-9.2/bin/pg_config'
-end
+
+##
+# pasenger needs sudo for restart
+# Steps on server:
+# 1. Create file: /etc/sudoers.d/deployer_username
+# 2. Add to file: deployer_username ALL=(ALL) NOPASSWD:/usr/bin/env,/usr/local/bin/passenger-config
+set :passenger_restart_with_sudo, true
 
 namespace :deploy do
-
-  before 'bundler:install', 'prepare_bundle_config'
-
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      # Your restart mechanism here, for example:
-      execute :touch, release_path.join('tmp/restart.txt')
-    end
-  end
-
-  after :publishing, :restart
-
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
@@ -62,8 +56,4 @@ namespace :deploy do
       # end
     end
   end
-
 end
-
-before 'deploy:publishing', 'squash:write_revision'
-
