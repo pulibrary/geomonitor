@@ -1,0 +1,19 @@
+version: '2'
+services:
+  geomonitor:
+    image: geomonitor
+    ports:
+     - "9006:5000"
+    environment:
+     - SOLR_URL
+     - RAILS_RELATIVE_URL_ROOT=/
+     - ROOT_URL=/
+     - POSTGRES_USER
+     - POSTGRES_PASSWORD
+    depends_on:
+     - db
+  db:
+    image: geoblacklight/postgres
+    environment:
+    - POSTGRES_USER
+    - POSTGRES_PASSWORD
