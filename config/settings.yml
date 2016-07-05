@@ -1,11 +1,6 @@
 # Settings 
 
-GEOBLACKLIGHT_URL: 'https://earthworks.stanford.edu'
-
-# NewRelic Settings
-NEWRELIC_APP_NAME: 'should be specific to stage and prod'
-NEWRELIC_LICENSE_KEY: 'this is private'
-
+GEOBLACKLIGHT_URL: 'https://pulmap-dev.princeton.edu'
 
 # Squash Settings
 SQUASH_API_HOST: 'http://squash-host.example.com'

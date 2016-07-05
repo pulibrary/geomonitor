@@ -10,31 +10,28 @@ require 'json'
 
 data = JSON::parse(File.read('data/transformed.json'))
 
-# wms = data.map { |x|  [x['dct_provenance_s'], x['solr_wms_url']] }
-#
-# wms.uniq.each do |doc|
-#   next unless doc[1]
-#   inst = Institution.where(name: doc[0]).first_or_create
-#   Host.where(url: doc[1].gsub(/\/wms/, ''), institution_id: inst.id).first_or_create
-# end
-
-
-
 data.each do |doc|
   next unless doc['dct_provenance_s']
-  inst = Institution.where(name: doc['dct_provenance_s']).first_or_create
-  host = Host.where(url: doc['solr_wms_url'].gsub(/\/wms/, ''), institution_id: inst.id).first_or_initialize
-  unless host.persisted?
-    inst_hosts = Host.where(institution_id: inst.id)
-    host.name = "#{host.institution.name} #{inst_hosts.length + 1}"
-    host.save
+  wms = JSON.parse(doc['dct_references_s']).try(:[], 'http://www.opengis.net/def/serviceType/ogc/wms')
+  if wms
+    wms = wms.gsub('/wms', '')
+    doc_institution = doc['dct_provenance_s']
+    institution = Institution.find_or_create_by(name: doc_institution)
+    host = Host.find_or_create_by(url: wms, institution_id: institution.id) do |host|
+      host.name = "#{institution.name}"
+    end
+    begin
+      georss_bbox = doc['georss_box_s'].split(' ')
+      Layer.create(
+        name: doc['layer_slug_s'],
+        host_id: host.id,
+        geoserver_layername: doc['layer_id_s'],
+        access: doc['dc_rights_s'],
+        bbox: "#{georss_bbox[1]} #{georss_bbox[0]} #{georss_bbox[3]} #{georss_bbox[2]}",
+        active: true
+      )
+    rescue NoMethodError => e
+      Rails.logger.error "#{e} for #{doc['layer_slug_s']}"
+    end
   end
-
-  l = Layer.where(name: doc['layer_slug_s'],
-              geoserver_layername: doc['layer_id_s'],
-              host_id: host.id,
-              access: doc['dc_rights_s'],
-              bbox: doc['solr_bbox']).first_or_create
-
-
 end
