@@ -2,11 +2,14 @@ class Ping < ActiveRecord::Base
   belongs_to :host, counter_cache: true, touch: true
 
   def self.check_status(host)
-    Geomonitor.logger.debug "Pinging #{host.url} ..."
+
+    url = self.host_url(host)
+
+    Geomonitor.logger.debug "Pinging #{url} ..."
     begin
-      p = Net::Ping::HTTP.new(host.url).ping?
+      p = Net::Ping::HTTP.new(url).ping?
     rescue URI::InvalidURIError => error
-      Geomonitor.logger.error "#{error} url is \"#{host.url}\" for host_id #{host.id}"
+      Geomonitor.logger.error "#{error} url is \"#{url}\" for host_id #{host.id}"
       p = false
     end
     Geomonitor.logger.info "Ping result: #{p}"
@@ -25,4 +28,16 @@ class Ping < ActiveRecord::Base
   def self.recent_status
     last.status if last
   end
+
+  private
+
+    def self.host_url(host)
+
+      # check if host is a princeton iiif server
+      if host.url =~ /libimages/i
+        "#{host.url}"
+      else
+        "#{host.url}/wms"
+      end
+    end
 end
