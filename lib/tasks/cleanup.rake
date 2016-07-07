@@ -29,6 +29,48 @@ namespace :cleanup do
     end
   end
 
+  desc 'delete wms layers'
+  task delete_wms_layers: :environment do
+    Geomonitor.get_all_document_ids.each do |name_id|
+      # Check to see if the layer already exists
+      l = Layer.find_by_name(name_id)
+      if l
+        doc = Geomonitor.find_document(name_id)
+        if doc.present? && doc['uuid'].present?
+          wms = JSON.parse(doc['dct_references_s']).try(:[], 'http://www.opengis.net/def/serviceType/ogc/wms')
+          if wms
+            l.destroy
+          end
+        end
+      end
+    end
+  end
+
+  desc 'delete iiif layers'
+  task delete_iiif_layers: :environment do
+    Geomonitor.get_all_document_ids.each do |name_id|
+      # Check to see if the layer already exists
+      l = Layer.find_by_name(name_id)
+      if l
+        doc = Geomonitor.find_document(name_id)
+        if doc.present? && doc['uuid'].present?
+          iiif = JSON.parse(doc['dct_references_s']).try(:[], 'http://iiif.io/api/image')
+          if iiif
+            l.destroy
+          end
+        end
+      end
+    end
+  end
+
+  desc 'delete host by url'
+  task :delete_host, [:hosturl] => :environment do |t, args|
+    host = Host.find_by(url: args[:hosturl])
+    if host
+      host.destroy
+    end
+  end
+
   private
 
   def with_config
