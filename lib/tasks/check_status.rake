@@ -42,6 +42,15 @@
         Status.run_check(layer)
       end
     end
+
+    desc 'Check host active layers'
+    task :check_host, [:hosturl]  => :environment do |t, args|
+      host = Host.find_by(url: args[:hosturl])
+      layers = Layer.where(host_id: host, active: true)
+      layers.shuffle.each do |layer|
+        Status.run_check(layer)
+      end
+    end
   end
 
   namespace :ping do
