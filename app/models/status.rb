@@ -8,8 +8,13 @@ class Status < ActiveRecord::Base
   def self.run_check(layer)
     Geomonitor::Tools.verbose_sleep(rand(1..5))
     Geomonitor.logger.info "Checking layer #{layer.name}"
+    client = case layer.endpoint
+      when 'wms'
+        Geomonitor::Client::Wms.new(layer)
+      else
+        Geomonitor::Client::Iiif.new(layer)
+    end
 
-    client = Geomonitor::Client.new(layer)
     response = client.create_response
 
     Geomonitor.logger.info "Status: #{response.status} #{response.response_code} in #{client.elapsed_time} seconds"

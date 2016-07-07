@@ -9,8 +9,8 @@
   <thead>
     <tr>
       <th></th>
-      <th>Layer Name</th>
-      <th>Geoserver Name</th>
+      <th>Name</th>
+      <th>Layer</th>
       <th>Access</th>
       <th>Status</th>
       <th>Recent Status</th>
@@ -25,7 +25,7 @@
       <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-globe'), "#{Settings.GEOBLACKLIGHT_URL}/catalog/#{layer.name}", target: '_blank', title: 'View in GeoBlacklight' %>
     </td>
     <td><%= link_to layer.name, layer %></td>
-    <td><%= layer.geoserver_layername %></td>
+    <td><%= layer.layername %></td>
     <td><%= layer.access %></td>
     <td><%= latest_status(layer) %></td>
     <td><%= recent_status(layer) %></td>

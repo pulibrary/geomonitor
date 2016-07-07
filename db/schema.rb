@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150123224019) do
+ActiveRecord::Schema.define(version: 20160707050721) do
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 20150123224019) do
 
   create_table "layers", force: :cascade do |t|
     t.string   "name"
-    t.string   "geoserver_layername"
+    t.string   "layername"
     t.string   "access"
     t.text     "description"
     t.string   "bbox"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20150123224019) do
     t.datetime "updated_at"
     t.string   "slug"
     t.boolean  "active"
+    t.string   "endpoint"
   end
 
   add_index "layers", ["host_id"], name: "index_layers_on_host_id"
