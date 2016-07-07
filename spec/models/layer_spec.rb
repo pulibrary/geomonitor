@@ -17,7 +17,7 @@ describe Layer do
         :layer,
         host_id: @host.id,
         name: 'stanford-zv882px4750',
-        geoserver_layername: 'druid:zv882px4750',
+        layername: 'druid:zv882px4750',
         access: 'Restricted',
         bbox: '73.258324 29.52631 78.859703 32.90303'
       )
@@ -29,7 +29,7 @@ describe Layer do
       expect(@layer.name).to eq('stanford-zv882px4750')
     end
     it 'with geoserver name' do
-      expect(@layer.geoserver_layername).to eq('druid:zv882px4750')
+      expect(@layer.layername).to eq('druid:zv882px4750')
     end
     it 'with access' do
       expect(@layer.access).to eq('Restricted')

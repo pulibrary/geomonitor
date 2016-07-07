@@ -1,24 +1,24 @@
 require 'spec_helper'
 
-describe Geomonitor::Client do
+describe Geomonitor::Client::Wms do
   let(:host) { create(:host, url: 'http://www.example.com/geoserver') }
   let(:layer) { create(
     :layer,
     host_id: host.id,
     name: 'stanford-zv882px4750',
-    geoserver_layername: 'druid:zv882px4750',
+    layername: 'druid:zv882px4750',
     access: 'Restricted',
     bbox: '73.258324 29.52631 78.859703 32.90303'
     )
   }
-  let(:client) { Geomonitor::Client.new(layer) }
+  let(:client) { Geomonitor::Client::Wms.new(layer) }
   describe 'intialize' do
     it 'is a Geomonitor::Client' do
-      expect(client).to be_an Geomonitor::Client
+      expect(client).to be_an Geomonitor::Client::Wms
     end
   end
   describe 'request_params' do
-    it 'includes geoserver_layername' do
+    it 'includes layername' do
       expect(client.request_params).to include 'LAYERS' => 'druid:zv882px4750'
     end
     it 'includes a formatted bbox tile request' do

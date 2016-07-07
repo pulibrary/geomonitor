@@ -26,6 +26,11 @@ module Geomonitor
         @status = 'OK'
         @response_code = @response.status
         @body = 'image/png'
+      elsif @response.headers[:content_type] == 'application/json'
+        @request_url = @response.env[:url].to_s
+        @status = 'OK'
+        @response_code = @response.status
+        @body = 'application/json'
       else
         @status = '??'
         @response_code = @response.status

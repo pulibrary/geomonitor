@@ -16,7 +16,7 @@ describe Status do
       :layer,
       host_id: @host.id,
       name: 'stanford-zv882px4750',
-      geoserver_layername: 'druid:zv882px4750',
+      layername: 'druid:zv882px4750',
       access: 'Restricted',
       bbox: '73.258324 29.52631 78.859703 32.90303'
     )

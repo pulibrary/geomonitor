@@ -1,6 +1,6 @@
 # GeoMonitor
 
-GeoMonitor is a application that monitors the health and availability of GeoServer hosts and layers. Built at Stanford University out of the desire to build a better discovery application for geospatial data, GeoBlacklight.
+GeoMonitor is a application that monitors the health and availability of geo server hosts and layers.
 
 ## Features
 
